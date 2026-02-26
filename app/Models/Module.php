@@ -23,14 +23,6 @@ class Module extends Model
         'is_permission'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->uuid = (string) Str::uuid();
-        });
-    }
 
     public function subModules()
     {
