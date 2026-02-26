@@ -8,6 +8,8 @@ class AIUsageLog extends Model
 {
     use HasFactory;
 
+    protected $table = 'ai_usage_logs';
+
     public $timestamps = false;
 
     protected $fillable = [

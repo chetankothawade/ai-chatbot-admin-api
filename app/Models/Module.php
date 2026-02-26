@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -9,7 +10,7 @@ use Spatie\Activitylog\LogOptions;
 
 class Module extends Model
 {
-    use LogsActivity;
+    use LogsActivity, HasUuid;
 
     protected $fillable = [
         'uuid',

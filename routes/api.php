@@ -136,7 +136,7 @@ Route::middleware(['ip.throttle', 'burst.throttle'])->group(function () {
     */
         Route::get('/activity-logs', [ActivityLogController::class, 'index']);
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Chat
     |--------------------------------------------------------------------------
@@ -144,12 +144,12 @@ Route::middleware(['ip.throttle', 'burst.throttle'])->group(function () {
         Route::prefix('chat')->group(function () {
 
             // Sessions
-            Route::apiResource('sessions', ChatSessionController::class);
             Route::delete('sessions/{id}/messages', [ChatSessionController::class, 'clearMessages']);
             Route::put('sessions/{id}/context', [ChatSessionController::class, 'updateContext']);
             Route::put('sessions/{id}/model', [ChatSessionController::class, 'updateModel']);
-            Route::patch('sessions/{id}/pin', [ChatSessionController::class, 'pin']);
-
+            Route::patch('sessions/{id}/pin', [ChatSessionController::class, 'togglePin']);
+            Route::apiResource('sessions', ChatSessionController::class);
+         
             // Messages
             Route::post('messages/send', [MessageController::class, 'send']);
             Route::get('messages', [MessageController::class, 'index']);
