@@ -1,0 +1,793 @@
+﻿{
+    "info":  {
+                 "_postman_id":  "e4ce2d5b-3536-4e63-b690-43f4aaec90db",
+                 "name":  "AI Chatbot - All Modules API",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+                 "description":  "Single Postman collection for all API modules."
+             },
+    "auth":  {
+                 "type":  "bearer",
+                 "bearer":  [
+                                {
+                                    "key":  "token",
+                                    "type":  "string",
+                                    "value":  "{{token}}"
+                                }
+                            ]
+             },
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://127.0.0.1:8040/api"
+                     },
+                     {
+                         "key":  "token",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "userUuid",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "moduleUuid",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "role",
+                         "value":  "admin"
+                     },
+                     {
+                         "key":  "modulePermissionId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "sessionId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "chatId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "messageId",
+                         "value":  "1"
+                     },
+                     {
+                         "key":  "participantUserId",
+                         "value":  "1"
+                     }
+                 ],
+    "item":  [
+                 {
+                     "name":  "Auth (Public)",
+                     "item":  [
+                                  {
+                                      "name":  "Register",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/register"
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/login"
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Forgot Password",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/forgot-password"
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Reset Password",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/reset-password"
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Refresh Token",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/refresh"
+                                                              },
+                                                      "auth":  {
+                                                                   "type":  "noauth"
+                                                               }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Auth (Protected)",
+                     "item":  [
+                                  {
+                                      "name":  "Me",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/me"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Logout",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/logout"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Users",
+                     "item":  [
+                                  {
+                                      "name":  "Get User List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/getList"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Users Index",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users?page=1\u0026per_page=10\u0026search="
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create User",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Show User",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/{{userUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Edit User",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/{{userUuid}}/edit"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Update User",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/{{userUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete User",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/{{userUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Toggle User Active",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/users/{{userUuid}}/active"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Modules",
+                     "item":  [
+                                  {
+                                      "name":  "Get Module List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/module/getList"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Modules Index",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules?page=1\u0026per_page=10\u0026search="
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Create Module",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Show Module",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/{{moduleUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Edit Module",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/{{moduleUuid}}/edit"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Update Module",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/{{moduleUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Delete Module",
+                                      "request":  {
+                                                      "method":  "DELETE",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/{{moduleUuid}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Toggle Module Active",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/modules/{{moduleUuid}}/active"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Role Modules",
+                     "item":  [
+                                  {
+                                      "name":  "Role Module Matrix",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/role-modules/matrix?role={{role}}"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Toggle Role Module",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/role-modules/toggle"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "User Permissions",
+                     "item":  [
+                                  {
+                                      "name":  "Sidebar Menu",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user-permissions/side-menu"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Toggle User Permission",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user-permissions/toggle"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get User Module Permissions",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user-permissions/{{userUuid}}/getAll"
+                                                              }
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Get User Module Access",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/user-permissions/{{userUuid}}/module-access"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Dashboard",
+                     "item":  [
+                                  {
+                                      "name":  "Summary",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/dashboard/summary"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Activity Logs",
+                     "item":  [
+                                  {
+                                      "name":  "Index",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/activity-logs?page=1\u0026per_page=10\u0026module=\u0026activity=\u0026from_date=\u0026to_date="
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Chat",
+                     "item":  [
+                                  {
+                                      "name":  "Sessions",
+                                      "item":  [
+                                                   {
+                                                       "name":  "List Sessions",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions?search=\u0026limit=20"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Create Session",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Show Session",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}?limit=50"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Update Session",
+                                                       "request":  {
+                                                                       "method":  "PUT",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Delete Session",
+                                                       "request":  {
+                                                                       "method":  "DELETE",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Clear Session Messages",
+                                                       "request":  {
+                                                                       "method":  "DELETE",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/messages"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Update Session Context",
+                                                       "request":  {
+                                                                       "method":  "PUT",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/context"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Update Session Model",
+                                                       "request":  {
+                                                                       "method":  "PUT",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/model"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Toggle Pin Session",
+                                                       "request":  {
+                                                                       "method":  "PATCH",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/pin"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  },
+                                  {
+                                      "name":  "Messages",
+                                      "item":  [
+                                                   {
+                                                       "name":  "Send Message",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/send"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "List Messages",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages?chat_id={{chatId}}\u0026limit=50"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Regenerate Message",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/{{messageId}}/regenerate"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Delete Message",
+                                                       "request":  {
+                                                                       "method":  "DELETE",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/{{messageId}}"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Stream Message (SSE)",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/stream"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  },
+                                  {
+                                      "name":  "Metadata",
+                                      "item":  [
+                                                   {
+                                                       "name":  "Add Metadata To Message",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/{{messageId}}/metadata"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "List Message Metadata",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/messages/{{messageId}}/metadata"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  },
+                                  {
+                                      "name":  "Usage",
+                                      "item":  [
+                                                   {
+                                                       "name":  "List Usage",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/usage?from=\u0026to="
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Usage By Chat",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/usage/{{chatId}}"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  },
+                                  {
+                                      "name":  "Search",
+                                      "item":  [
+                                                   {
+                                                       "name":  "Search Messages",
+                                                       "request":  {
+                                                                       "method":  "GET",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/search?q=hello\u0026limit=50"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  },
+                                  {
+                                      "name":  "Participants",
+                                      "item":  [
+                                                   {
+                                                       "name":  "Add Participant",
+                                                       "request":  {
+                                                                       "method":  "POST",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/participants"
+                                                                               }
+                                                                   }
+                                                   },
+                                                   {
+                                                       "name":  "Remove Participant",
+                                                       "request":  {
+                                                                       "method":  "DELETE",
+                                                                       "header":  [
+
+                                                                                  ],
+                                                                       "url":  {
+                                                                                   "raw":  "{{baseUrl}}/chat/sessions/{{sessionId}}/participants/{{participantUserId}}"
+                                                                               }
+                                                                   }
+                                                   }
+                                               ]
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Editor Upload",
+                     "item":  [
+                                  {
+                                      "name":  "Upload File",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "header":  [
+
+                                                                 ],
+                                                      "url":  {
+                                                                  "raw":  "{{baseUrl}}/editor/upload"
+                                                              }
+                                                  }
+                                  }
+                              ]
+                 }
+             ]
+}
