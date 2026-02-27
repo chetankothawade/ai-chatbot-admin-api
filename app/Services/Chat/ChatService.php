@@ -60,6 +60,7 @@ class ChatService
                 'chat_id' => $chat->id,
                 'role' => 'assistant',
                 'content' => $aiResponse,
+                'parent_id' => $userMsg->id,
                 'response_time_ms' => $responseTime
             ]);
 
