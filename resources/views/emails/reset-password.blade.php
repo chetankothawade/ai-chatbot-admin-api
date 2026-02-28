@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SCIP – Reset Your Password</title>
+    <title>NACK – Reset Your Password</title>
 
     <style>
         body {
@@ -20,7 +20,7 @@
             padding: 35px 45px;
             border-radius: 14px;
             border-top: 6px solid #0071BC;
-            /* SCIP Blue */
+            /* NACK Blue */
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
         }
 
@@ -53,7 +53,7 @@
             margin-top: 28px;
             padding: 14px 32px;
             background-color: #0071BC;
-            /* SCIP Blue */
+            /* NACK Blue */
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 8px;
@@ -70,7 +70,7 @@
 
         a {
             color: #0071BC;
-            /* SCIP Blue */
+            /* NACK Blue */
         }
     </style>
 
@@ -80,7 +80,7 @@
     <div class="container">
 
         <div class="logo">
-            <img src="{{ $brand_logo }}" alt="SCIP Logo">
+            <img src="{{ $brand_logo }}" alt="NACK Logo">
         </div>
 
         <div class="title">Reset Your Password</div>
@@ -88,7 +88,7 @@
         <div class="content">
             <p>Hello,</p>
 
-            <p>You requested a password reset for your <strong>SCIP</strong> account.
+            <p>You requested a password reset for your <strong>NACK</strong> account.
                 Click the button below to set a new password:</p>
 
             <p style="text-align: center;">
@@ -105,7 +105,7 @@
         </div>
 
         <div class="footer">
-            © {{ date('Y') }} SCIP — All rights reserved.
+            © {{ date('Y') }} NACK — All rights reserved.
         </div>
 
     </div>
