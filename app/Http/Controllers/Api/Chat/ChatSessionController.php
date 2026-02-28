@@ -47,7 +47,7 @@ class ChatSessionController extends Controller
         $sessions = $this->chatSessionService->indexForUser(
             $this->userId(),
             $validated['search'] ?? null,
-            (int) ($validated['limit'] ?? 20)
+            (int) ($validated['limit'] ?? 10)
         );
 
         return $this->success('Chat sessions fetched', [

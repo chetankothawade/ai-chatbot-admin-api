@@ -58,11 +58,11 @@ class UsageController extends Controller
     /**
      * Chat-specific usage
      */
-    public function chatUsage(UsageChatRequest $request, int $chatId): JsonResponse
+    public function chatUsage(UsageChatRequest $request, int $chat_id): JsonResponse
     {
         $usage = $this->usageService->byChatForUser(
             $this->userId(),
-            $chatId // ✅ use route param only
+            $chat_id
         );
 
         return $this->success(

@@ -16,6 +16,12 @@ class ChatParticipantResource extends JsonResource
             'chat_id' => $this->chat_id,
             'user_id' => $this->user_id,
             'role' => $this->role,
+            'user' => $this->whenLoaded('user', function () {
+                return [
+                    'id' => $this->user?->id,
+                    'name' => $this->user?->name,
+                ];
+            }),
             'created_at' => optional($this->created_at)?->toISOString(),
             'updated_at' => optional($this->updated_at)?->toISOString(),
         ];

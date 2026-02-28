@@ -14,7 +14,7 @@ class ChatSessionService
     public function indexForUser(
         int $userId,
         ?string $search = null,
-        int $limit = 20
+        int $limit = 10
     ): CursorPaginator {
         return ChatSession::query()
             ->where('user_id', $userId)

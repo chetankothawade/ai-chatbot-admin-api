@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api\Chat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Chat\ParticipantAddRequest;
+use App\Http\Requests\Api\Chat\ParticipantIndexRequest;
 use App\Http\Requests\Api\Chat\ParticipantRemoveRequest;
 use App\Http\Resources\Chat\ChatParticipantResource;
 use App\Services\Chat\ParticipantService;
@@ -21,14 +22,27 @@ class ParticipantController extends Controller
     ) {}
 
     /**
+     * List participants in chat
+     */
+    public function index(ParticipantIndexRequest $request, int $id): JsonResponse
+    {
+        $participants = $this->participantService->index($id);
+
+        return $this->success(
+            'Participants fetched',
+            ChatParticipantResource::collection($participants)
+        );
+    }
+
+    /**
      * Add participant to chat
      */
-    public function add(ParticipantAddRequest $request, int $chatId): JsonResponse
+    public function add(ParticipantAddRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
 
         $participant = $this->participantService->add(
-            $chatId,           // ✅ route param
+            $id,
             $validated['user_id'],
             $validated['role'] ?? null
         );
@@ -43,11 +57,11 @@ class ParticipantController extends Controller
     /**
      * Remove participant from chat
      */
-    public function remove(int $chatId, int $userId): JsonResponse
+    public function remove(ParticipantRemoveRequest $request, int $id, int $user_id): JsonResponse
     {
         $deleted = $this->participantService->remove(
-            $chatId,
-            $userId
+            $id,
+            $user_id
         );
 
         return $this->success('Participant removed', [

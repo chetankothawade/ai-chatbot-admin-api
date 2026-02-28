@@ -5,9 +5,19 @@ declare(strict_types=1);
 namespace App\Services\Chat;
 
 use App\Models\ChatParticipant;
+use Illuminate\Database\Eloquent\Collection;
 
 class ParticipantService
 {
+    public function index(int $chatId): Collection
+    {
+        return ChatParticipant::query()
+            ->with('user:id,name')
+            ->where('chat_id', $chatId)
+            ->orderBy('id')
+            ->get();
+    }
+
     public function add(
       
         int $chatId,

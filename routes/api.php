@@ -154,7 +154,7 @@ Route::middleware(['ip.throttle', 'burst.throttle'])->group(function () {
             Route::post('messages/send', [MessageController::class, 'send']);
             Route::get('messages', [MessageController::class, 'index']);
             Route::post('messages/{id}/regenerate', [MessageController::class, 'regenerate']);
-            Route::delete('messages/{id}', [MessageController::class, 'delete']);
+            Route::delete('messages/{id}', [MessageController::class, 'destroy']);
 
             // Streaming
             Route::post('messages/stream', [MessageController::class, 'stream']);
@@ -171,6 +171,7 @@ Route::middleware(['ip.throttle', 'burst.throttle'])->group(function () {
             Route::get('search', [SearchController::class, 'search']);
 
             // Participants
+            Route::get('sessions/{id}/participants', [ParticipantController::class, 'index']);
             Route::post('sessions/{id}/participants', [ParticipantController::class, 'add']);
             Route::delete('sessions/{id}/participants/{user_id}', [ParticipantController::class, 'remove']);
         });
