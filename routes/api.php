@@ -152,6 +152,7 @@ Route::middleware(['ip.throttle', 'burst.throttle'])->group(function () {
          
             // Messages
             Route::post('messages/send', [MessageController::class, 'send']);
+            Route::post('messages/transcribe', [MessageController::class, 'transcribe']);
             Route::get('messages', [MessageController::class, 'index']);
             Route::post('messages/{id}/regenerate', [MessageController::class, 'regenerate']);
             Route::delete('messages/{id}', [MessageController::class, 'destroy']);

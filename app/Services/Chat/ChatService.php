@@ -6,6 +6,7 @@ namespace App\Services\Chat;
 
 use App\Models\ChatSession;
 use App\Models\Message;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -166,5 +167,13 @@ class ChatService
         ChatSession::where('id', $chatId)
             ->where('user_id', $userId)
             ->delete();
+    }
+
+    public function transcribeAudio(
+        UploadedFile $audio,
+        ?string $language = null,
+        ?string $prompt = null
+    ): array {
+        return $this->aiService->transcribeAudio($audio, $language, $prompt);
     }
 }

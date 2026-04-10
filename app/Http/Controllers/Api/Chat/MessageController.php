@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Chat\MessageIndexRequest;
 use App\Http\Requests\Api\Chat\MessageRouteIdRequest;
 use App\Http\Requests\Api\Chat\MessageSendRequest;
 use App\Http\Requests\Api\Chat\MessageStreamRequest;
+use App\Http\Requests\Api\Chat\MessageTranscribeRequest;
 use App\Http\Resources\Chat\ChatActionResource;
 use App\Http\Resources\Chat\ChatMessageResource;
 use App\Http\Resources\Chat\ChatSendMessageResource;
@@ -47,6 +48,25 @@ class MessageController extends Controller
             'Message sent',
             new ChatSendMessageResource($result)
         );
+    }
+
+    public function transcribe(MessageTranscribeRequest $request): JsonResponse
+    {
+        try {
+            $transcription = $this->chatService->transcribeAudio(
+                $request->file('audio'),
+                $request->validated('language'),
+                $request->validated('prompt')
+            );
+
+            return $this->success('Voice transcribed', $transcription);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $this->error('Voice transcription failed', [
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 
     public function index(MessageIndexRequest $request): JsonResponse
