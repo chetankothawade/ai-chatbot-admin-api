@@ -45,6 +45,7 @@ class ChatSessionService
 
         $messages = Message::query()
             ->where('chat_id', $chat->id)
+            ->with('attachments')
             ->orderByDesc('id')
             ->limit($limit)
             ->get()

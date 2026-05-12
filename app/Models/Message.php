@@ -36,6 +36,11 @@ class Message extends Model
         return $this->hasMany(MessageMetadata::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(MessageAttachment::class);
+    }
+
     public function parent()
     {
         return $this->belongsTo(Message::class, 'parent_id');

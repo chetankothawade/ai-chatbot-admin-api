@@ -40,8 +40,9 @@ class MessageController extends Controller
 
         $result = $this->chatService->sendMessage(
             $this->userId(),
-            $validated['message'],
-            $validated['chat_id'] ?? null
+            (string) ($validated['message'] ?? ''),
+            $validated['chat_id'] ?? null,
+            $request->file('attachments', [])
         );
 
         return $this->success(
@@ -75,8 +76,8 @@ class MessageController extends Controller
 
         $messages = $this->chatService->getChatMessagesCursor(
             $this->userId(),
-            $validated['chat_id'],
-            $validated['limit'] ?? 50
+            (int) $validated['chat_id'],
+            (int) ($validated['limit'] ?? 50)
         );
 
         return $this->success('Messages fetched', [

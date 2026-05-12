@@ -9,6 +9,7 @@ use App\Models\Message;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Services\AI\OpenAIService;
 use Illuminate\Support\Facades\Cache;
@@ -20,24 +21,32 @@ class ChatService
     /**
      * Send message + get AI response
      */
-    public function sendMessage(int $userId, string $message, ?int $chatId = null): array
+    public function sendMessage(int $userId, string $message, ?int $chatId = null, array $attachments = []): array
     {
-        return DB::transaction(function () use ($userId, $message, $chatId) {
+        return DB::transaction(function () use ($userId, $message, $chatId, $attachments) {
 
             // 1. Create or fetch chat
+            $message = trim($message);
+            $messageContent = $message !== ''
+                ? $message
+                : $this->attachmentOnlyMessage($attachments);
+
             $chat = $chatId
                 ? ChatSession::where('id', $chatId)->where('user_id', $userId)->firstOrFail()
-                : $this->createNewChat($userId, $message);
+                : $this->createNewChat($userId, $messageContent);
 
             // 2. Save user message
             $userMsg = Message::create([
                 'chat_id' => $chat->id,
                 'role' => 'user',
-                'content' => $message
+                'content' => $messageContent
             ]);
+
+            $storedAttachments = $this->storeAttachments($userMsg, $attachments);
 
             // 3. Get last messages for context (limit 10)
             $history = Message::where('chat_id', $chat->id)
+                ->with('attachments')
                 ->latest()
                 ->limit(10)
                 ->get()
@@ -45,7 +54,7 @@ class ChatService
                 ->values()
                 ->map(fn($msg) => [
                     'role' => $msg->role,
-                    'content' => $msg->content
+                    'content' => $this->contentForAi($msg)
                 ])
                 ->toArray();
 
@@ -73,7 +82,7 @@ class ChatService
             return [
                 'chat' => $chat->fresh(),
                 'chat_id' => $chat->id,
-                'user_message' => $userMsg,
+                'user_message' => $userMsg->setRelation('attachments', $storedAttachments),
                 'assistant_message' => $assistantMsg
             ];
         });
@@ -128,6 +137,7 @@ class ChatService
     ): CursorPaginator {
         return Message::query()
             ->where('chat_id', $chatId)
+            ->with('attachments')
             ->whereHas(
                 'chat',
                 fn($q) =>
@@ -148,6 +158,7 @@ class ChatService
     public function regenerateMessage(int $userId, int $messageId): array
     {
         $message = Message::query()
+            ->with('attachments')
             ->where('id', $messageId)
             ->whereHas('chat', fn($q) => $q->where('user_id', $userId))
             ->firstOrFail();
@@ -175,5 +186,90 @@ class ChatService
         ?string $prompt = null
     ): array {
         return $this->aiService->transcribeAudio($audio, $language, $prompt);
+    }
+
+    private function storeAttachments(Message $message, array $attachments)
+    {
+        $records = collect();
+
+        foreach ($attachments as $file) {
+            if (!$file instanceof UploadedFile) {
+                continue;
+            }
+
+            $extension = $file->getClientOriginalExtension();
+            $filename = (string) Str::uuid() . ($extension ? ".{$extension}" : '');
+            $path = $file->storeAs("uploads/chat/{$message->chat_id}", $filename, 'public');
+
+            $records->push($message->attachments()->create([
+                'disk' => 'public',
+                'path' => $path,
+                'original_name' => $file->getClientOriginalName() ?: $filename,
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize() ?: 0,
+            ]));
+        }
+
+        return $records;
+    }
+
+    private function attachmentOnlyMessage(array $attachments): string
+    {
+        $names = collect($attachments)
+            ->filter(fn($file) => $file instanceof UploadedFile)
+            ->map(fn(UploadedFile $file) => $file->getClientOriginalName())
+            ->filter()
+            ->values();
+
+        return $names->isNotEmpty()
+            ? 'Uploaded attachment(s): ' . $names->implode(', ')
+            : '';
+    }
+
+    private function contentForAi(Message $message): string
+    {
+        $content = (string) $message->content;
+
+        if (!$message->relationLoaded('attachments') || $message->attachments->isEmpty()) {
+            return $content;
+        }
+
+        $attachmentLines = $message->attachments
+            ->map(function ($attachment) {
+                $line = "- {$attachment->original_name}";
+                if ($attachment->mime_type) {
+                    $line .= " ({$attachment->mime_type})";
+                }
+
+                $snippet = $this->readTextAttachmentSnippet($attachment->disk, $attachment->path, $attachment->mime_type);
+                if ($snippet !== '') {
+                    $line .= "\n{$snippet}";
+                }
+
+                return $line;
+            })
+            ->implode("\n");
+
+        return trim($content . "\n\nAttachments:\n" . $attachmentLines);
+    }
+
+    private function readTextAttachmentSnippet(string $disk, string $path, ?string $mimeType): string
+    {
+        $textMimeTypes = [
+            'text/plain',
+            'text/csv',
+            'application/json',
+        ];
+
+        if (!in_array((string) $mimeType, $textMimeTypes, true)) {
+            return '';
+        }
+
+        $contents = Storage::disk($disk)->get($path);
+        if (!is_string($contents) || trim($contents) === '') {
+            return '';
+        }
+
+        return Str::limit(trim($contents), 4000);
     }
 }

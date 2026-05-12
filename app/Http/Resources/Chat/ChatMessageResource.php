@@ -19,6 +19,9 @@ class ChatMessageResource extends JsonResource
             'tokens' => $this->tokens,
             'response_time_ms' => $this->response_time_ms,
             'parent_id' => $this->parent_id,
+            'attachments' => ChatMessageAttachmentResource::collection(
+                $this->whenLoaded('attachments')
+            ),
             'created_at' => optional($this->created_at)?->toISOString(),
         ];
     }

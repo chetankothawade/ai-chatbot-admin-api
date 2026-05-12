@@ -12,7 +12,13 @@ class MessageSendRequest extends BaseApiRequest
     {
         return [
             'chat_id' => 'required|integer|exists:chat_sessions,id',
-            'message' => 'required|string',
+            'message' => 'required_without:attachments|string|nullable',
+            'attachments' => 'nullable|array|max:5',
+            'attachments.*' => [
+                'file',
+                'max:10240',
+                'mimetypes:text/plain,text/csv,application/json,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/webp,image/gif',
+            ],
         ];
     }
 }

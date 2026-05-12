@@ -4,9 +4,13 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\MessageAttachment;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use App\Services\AI\OpenAIService;
+use Mockery\MockInterface;
 
 class ChatApiTest extends TestCase
 {
@@ -16,13 +20,11 @@ class ChatApiTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // Bind a simple OpenAIService mock to return deterministic text
-        $this->app->instance(OpenAIService::class, new class {
-            public function chat($history)
-            {
+        $this->mock(OpenAIService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('chat')->andReturnUsing(function ($history) {
                 $last = $history ? end($history)['content'] : '';
                 return 'AI reply to: ' . $last;
-            }
+            });
         });
 
         Sanctum::actingAs($user, ['*']);
@@ -49,8 +51,8 @@ class ChatApiTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->app->instance(OpenAIService::class, new class {
-            public function chat($history) { return 'AI reply'; }
+        $this->mock(OpenAIService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('chat')->andReturn('AI reply');
         });
 
         Sanctum::actingAs($user, ['*']);
@@ -67,6 +69,47 @@ class ChatApiTest extends TestCase
 
         $data = $index->json('data.data');
         $this->assertIsArray($data);
-        $this->assertCount(2, $data);
+        $this->assertCount(4, $data);
+    }
+
+    public function test_can_send_message_with_file_attachment(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+
+        $this->mock(OpenAIService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('chat')->andReturnUsing(function ($history) {
+                $last = $history ? end($history)['content'] : '';
+
+                $this->assertStringContainsString('notes.txt', $last);
+                $this->assertStringContainsString('Important note', $last);
+
+                return 'Got attachment';
+            });
+        });
+
+        Sanctum::actingAs($user, ['*']);
+
+        $session = $this->postJson('/api/chat/sessions', []);
+        $chatId = $session->json('data.id');
+
+        $response = $this->post('/api/chat/messages/send', [
+            'chat_id' => $chatId,
+            'message' => 'Please review this file',
+            'attachments' => [
+                UploadedFile::fake()->createWithContent('notes.txt', 'Important note'),
+            ],
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.user_message.content', 'Please review this file')
+            ->assertJsonPath('data.user_message.attachments.0.name', 'notes.txt')
+            ->assertJsonPath('data.assistant_message.content', 'Got attachment');
+
+        $attachment = MessageAttachment::query()->first();
+
+        $this->assertNotNull($attachment);
+        Storage::disk('public')->assertExists($attachment->path);
     }
 }

@@ -29,7 +29,9 @@ return new class extends Migration {
             $table->index('created_at');
 
             // Optional FULLTEXT (MySQL 8)
-            $table->fullText('content');
+            if (Schema::getConnection()->getDriverName() === 'mysql') {
+                $table->fullText('content');
+            }
         });
     }
 
